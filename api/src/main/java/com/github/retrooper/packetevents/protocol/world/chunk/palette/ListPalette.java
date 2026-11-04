@@ -50,6 +50,7 @@ public class ListPalette implements Palette {
         this(bitsPerEntry);
 
         int paletteLength = in.readVarInt();
+        validatePaletteLength(paletteLength, this.data.length);
         for (int i = 0; i < paletteLength; i++) {
             this.data[i] = in.readVarInt();
         }
@@ -60,6 +61,7 @@ public class ListPalette implements Palette {
         this(bitsPerEntry);
 
         int paletteLength = wrapper.readVarInt();
+        validatePaletteLength(paletteLength, this.data.length);
         for (int i = 0; i < paletteLength; i++) {
             this.data[i] = wrapper.readVarInt();
         }
@@ -112,4 +114,10 @@ public class ListPalette implements Palette {
     public int getBits() {
         return this.bits;
     }
+    private static void validatePaletteLength(int length, int capacity) {
+        if (length < 0 || length > capacity) {
+            throw new IllegalArgumentException("Invalid palette length " + length + " (capacity " + capacity + ")");
+        }
+    }
+
 }

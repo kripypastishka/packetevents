@@ -50,6 +50,7 @@ public class MapPalette implements Palette {
         this(bitsPerEntry);
 
         int paletteLength = in.readVarInt();
+        validatePaletteLength(paletteLength, this.idToState.length);
         for (int i = 0; i < paletteLength; i++) {
             int state = in.readVarInt();
             this.idToState[i] = state;
@@ -62,6 +63,7 @@ public class MapPalette implements Palette {
         this(bitsPerEntry);
 
         int paletteLength = wrapper.readVarInt();
+        validatePaletteLength(paletteLength, this.idToState.length);
         for (int i = 0; i < paletteLength; i++) {
             int state = wrapper.readVarInt();
             this.idToState[i] = state;
@@ -99,4 +101,10 @@ public class MapPalette implements Palette {
     public int getBits() {
         return this.bits;
     }
+    private static void validatePaletteLength(int length, int capacity) {
+        if (length < 0 || length > capacity) {
+            throw new IllegalArgumentException("Invalid palette length " + length + " (capacity " + capacity + ")");
+        }
+    }
+
 }
